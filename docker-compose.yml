@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  linkl:
+    build: .
+    # will continue until Postgres is up. Once up, uvicorn main:app --host 0.0.0.0 runs.
+    # command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uvicorn main:app --host 0.0.0.0 --reload --app-dir src'
+    volumes:
+      - .:/code
+    ports:
+      - 8009:8000
+    environment:
+      - DATABASE_URL=${DB_URL}
+    depends_on:
+      - db
+  
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    environment:
+      - LC_ALL=C.UTF-8
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_PORT=${DB_PORT}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+
+volumes:
+  postgres_data:
