@@ -4,3 +4,4 @@ __pycache__/
 *.pyc
 .gitignore
 .vscode/
+.pytest_cache/

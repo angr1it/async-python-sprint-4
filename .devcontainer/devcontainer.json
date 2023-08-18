@@ -4,7 +4,7 @@
 		"../docker-compose.yml"
 	  ], 
 	"service": "linkl",
-	"runServices": ["linkl", "db"],
+	"runServices": ["linkl", "db", "db_test"],
 	"workspaceFolder": "/code",
 	"customizations": {
         "vscode": {
@@ -20,7 +20,8 @@
                 "ms-python.vscode-pylance",
                 "ms-azuretools.vscode-docker",
                 "ms-python.flake8",
-                "ms-python.black-formatter"
+                "ms-python.black-formatter",
+                "cweijan.vscode-database-client2"
             ]
         }
     }

@@ -10,7 +10,7 @@ services:
     ports:
       - 8009:8000
     environment:
-      - DATABASE_URL=${DB_URL}
+      - DATABASE_URL=${DATABASE_DSN}
     depends_on:
       - db
   
@@ -19,13 +19,29 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     expose:
-      - 5432
+      - ${DB_PORT}
     environment:
       - LC_ALL=C.UTF-8
       - POSTGRES_DB=${DB_NAME}
+      - PGPORT=${DB_PORT}
       - POSTGRES_PORT=${DB_PORT}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASS}
 
+  db_test:
+    image: postgres:15-alpine
+    volumes:
+      - test_postgres_data:/var/lib/postgresql/data/
+    expose:
+      - ${DB_TEST_PORT}
+    environment:
+      - LC_ALL=C.UTF-8
+      - POSTGRES_DB=${DB_TEST_NAME}
+      - PGPORT=${DB_TEST_PORT}
+      - POSTGRES_PORT=${DB_TEST_PORT}
+      - POSTGRES_USER=${DB_TEST_USER}
+      - POSTGRES_PASSWORD=${DB_TEST_PASS}
+
 volumes:
   postgres_data:
+  test_postgres_data:
