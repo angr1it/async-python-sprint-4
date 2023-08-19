@@ -32,8 +32,7 @@ async def batch_upload(
     objs_in: list[URLCreateInput],
     db: AsyncSession = Depends(get_async_session)
 ):
-    data = await url_repository.bulk_create(db=db, user=user, objs_in=objs_in)
-    return data
+    return await url_repository.bulk_create(db=db, user=user, objs_in=objs_in)
 
 
 @url_router.get("/{short_url_id}", response_model=URLRead)
