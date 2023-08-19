@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-
 from db import get_async_session
 from services.ping import ping
 from auth.db import User
@@ -16,10 +15,8 @@ async def get_ping(
     db: AsyncSession = Depends(get_async_session)
 ):
     connect = await ping(db=db)
-    if user:
-        email = user.email
-    else:
-        email = None
+
+    email = None if not user else user.email
 
     return {
         "status": "OK",

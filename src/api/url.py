@@ -22,9 +22,18 @@ async def create_url(
     obj_in: URLCreateInput,
     db: AsyncSession = Depends(get_async_session)
 ):
-    response = await url_repository.create(db=db, obj_in=obj_in, user=user)
+    return await url_repository.create(db=db, obj_in=obj_in, user=user)
 
-    return response
+
+@url_router.post("/batch_upload", response_model=list[URLRead])
+async def batch_upload(
+    *,
+    user: User = Depends(current_user),
+    objs_in: list[URLCreateInput],
+    db: AsyncSession = Depends(get_async_session)
+):
+    data = await url_repository.bulk_create(db=db, user=user, objs_in=objs_in)
+    return data
 
 
 @url_router.get("/{short_url_id}", response_model=URLRead)
@@ -34,23 +43,20 @@ async def get_url_by_id(
     db: AsyncSession = Depends(get_async_session),
     short_url_id: int
 ):
-    result = await url_repository.get(db=db, user=user, short_url_id=short_url_id)
-    return result
+    return await url_repository.get(db=db, user=user, short_url_id=short_url_id)
 
 
 @url_router.post("/items/", response_model=list[URLRead])
-async def batch_upload(
+async def get_url_by_ids(
     *,
     user: User = Depends(current_user),
     db: AsyncSession = Depends(get_async_session),
     ids_list: IdsList
 ):
     short_url_ids = ids_list.ids
-    response = await url_repository.get_multi(
+    return await url_repository.get_multi(
         db=db, user=user, short_url_ids=short_url_ids
     )
-
-    return response
 
 
 @url_router.get("/delete/{short_url_id}", response_model=URLRead)
@@ -60,9 +66,7 @@ async def delete_url(
     db: AsyncSession = Depends(get_async_session),
     short_url_id: int
 ):
-    data = await url_repository.delete(db=db, id=short_url_id, user=user)
-
-    return data
+    return await url_repository.delete(db=db, id=short_url_id, user=user)
 
 
 @url_router.get("/user/{username}", response_model=list[URLRead])
@@ -72,9 +76,7 @@ async def get_by_username(
     db: AsyncSession = Depends(get_async_session),
     username: str
 ) -> list[URLRead]:
-    data = await url_repository.get_by_username(db=db, viewer=user, username=username)
-
-    return data
+    return await url_repository.get_by_username(db=db, viewer=user, username=username)
 
 
 @url_router.get("/{short_url_id}/status")

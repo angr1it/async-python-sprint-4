@@ -31,4 +31,4 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=119 --statistics --config=setup.cfg
     - name: pytest
       run: |
-        pytest --import-mode=importlib
+        pytest -c pytest.ini

@@ -15,4 +15,5 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-ENTRYPOINT [ "tail", "-f", "/dev/null" ]
+
+ENTRYPOINT ["bash", "-c", "alembic upgrade head && while !</dev/tcp/db/5432; do sleep 1; done; uvicorn main:app --host 0.0.0.0 --reload --app-dir /code/src/"]

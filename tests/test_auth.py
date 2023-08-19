@@ -1,10 +1,10 @@
-
 from tests.conftest import client
+from main import app
 
 
 def test_register():
     response = client.post(
-        "auth/register",
+        url=app.url_path_for('register:register'),
         json={
             "username": "user",
             "email": "user@example.com",
@@ -20,7 +20,7 @@ def test_register():
 
 def test_login():
     response = client.post(
-        "auth/jwt/login",
+        url=app.url_path_for('auth:jwt.login'),
         data="grant_type=&username=user@example.com&password=string&scope=&client_id=&client_secret=",
         headers={"Content-Type": "application/x-www-form-urlencoded"}
     )
@@ -29,7 +29,7 @@ def test_login():
     login_cookie = response.cookies
 
     response = client.post(
-        "auth/jwt/logout",
+        url=app.url_path_for('auth:jwt.logout'),
         cookies=login_cookie
     )
 

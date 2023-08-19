@@ -1,10 +1,10 @@
-
 from tests.conftest import client
+from main import app
 
 
 def test_ping_anonymus():
     response = client.get(
-        "api/ping",
+        url=app.url_path_for('get_ping'),
     )
 
     assert response.content == b'{"status":"OK","data":{"db_on":true,"user":null},"description":null}'
@@ -12,7 +12,7 @@ def test_ping_anonymus():
 
 def test_ping_logged():
     response = client.post(
-        "auth/register",
+        url=app.url_path_for('register:register'),
         json={
             "username": "ping",
             "email": "ping@test.com",
@@ -26,7 +26,7 @@ def test_ping_logged():
     assert response.status_code == 201
 
     response = client.post(
-        "auth/jwt/login",
+        url=app.url_path_for('auth:jwt.login'),
         data="grant_type=&username=ping@test.com&password=string&scope=&client_id=&client_secret=",
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
@@ -35,14 +35,14 @@ def test_ping_logged():
     login_cookie = response.cookies
 
     response = client.get(
-        "api/ping",
+        url=app.url_path_for('get_ping'),
         cookies=login_cookie
     )
 
     assert response.content == b'{"status":"OK","data":{"db_on":true,"user":"ping@test.com"},"description":null}'
 
     response = client.post(
-        "auth/jwt/logout",
+        url=app.url_path_for('auth:jwt.logout'),
         cookies=login_cookie
     )
 

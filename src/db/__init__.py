@@ -8,7 +8,7 @@ from core.config import app_settings
 
 engine = create_async_engine(
     url=str(app_settings.database_dsn),
-    echo=True
+    echo=app_settings.echo_db_engine
 )
 
 

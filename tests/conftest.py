@@ -2,7 +2,6 @@ import os
 from typing import AsyncGenerator
 import asyncio
 
-from dotenv import load_dotenv
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.pool import NullPool
@@ -15,8 +14,6 @@ from db import get_async_session
 from models import Base
 from main import app
 
-
-load_dotenv()
 
 DB_TEST_DSN = os.environ.get("DATABASE_TEST_DSN")
 

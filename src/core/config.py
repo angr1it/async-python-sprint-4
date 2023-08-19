@@ -7,6 +7,7 @@ class AppSettings(BaseSettings):
     database_dsn: PostgresDsn
     jwt_secret: str
     user_secret: str
+    echo_db_engine: bool
 
     class Config:
         env_file: str = ".env"

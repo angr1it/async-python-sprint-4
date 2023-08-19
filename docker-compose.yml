@@ -3,8 +3,6 @@ version: '3.8'
 services:
   linkl:
     build: .
-    # will continue until Postgres is up. Once up, uvicorn main:app --host 0.0.0.0 runs.
-    # command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uvicorn main:app --host 0.0.0.0 --reload --app-dir src'
     volumes:
       - .:/code
     ports:

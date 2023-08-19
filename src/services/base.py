@@ -1,11 +1,13 @@
 from typing import Generic, TypeVar
+from abc import ABC
 
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from models import Base
 
 
-class Repository:
+class Repository(ABC):
     def get(self, *args, **kwargs):
         raise NotImplementedError
 
