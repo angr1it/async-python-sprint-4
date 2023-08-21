@@ -17,6 +17,10 @@ from services.view import view_repository
 LINK_GEN_LENGTH = 10
 
 
+class Unauthorized(Exception):
+    pass
+
+
 class RepositoryDBURL(RepositoryDB[URLModel, URLCreate]):
 
     async def get_url_by_short_url(self, db: AsyncSession, short_url: str):
@@ -143,7 +147,7 @@ class RepositoryDBURL(RepositoryDB[URLModel, URLCreate]):
         self, db: AsyncSession, user: User, id: int
     ) -> Coroutine[Any, Any, URLBase]:
         if not user:
-            return None
+            raise Unauthorized
 
         obj = await super().get(db=db, id=id)
 
@@ -151,10 +155,10 @@ class RepositoryDBURL(RepositoryDB[URLModel, URLCreate]):
             return None
 
         if not obj.creator_id:
-            return None
+            raise Unauthorized
 
         if not obj.creator_id == user.id:
-            return None
+            raise Unauthorized
 
         obj.deleted = True
 

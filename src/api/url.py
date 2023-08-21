@@ -1,12 +1,12 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from db import get_async_session
 from auth.db import User
 from api.auth import current_user
-from services.url import url_repository
+from services.url import url_repository, Unauthorized
 from services.view import view_repository
 from schemas.url import URLCreateInput, URLRead
 from schemas.ids_list import IdsList
@@ -65,7 +65,15 @@ async def delete_url(
     db: AsyncSession = Depends(get_async_session),
     short_url_id: int
 ):
-    return await url_repository.delete(db=db, id=short_url_id, user=user)
+    try:
+        result = await url_repository.delete(db=db, id=short_url_id, user=user)
+    except Unauthorized:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    if not result:
+        raise HTTPException(status_code=410, detail="Gone")
+
+    return result
 
 
 @url_router.get("/user/{username}", response_model=list[URLRead])

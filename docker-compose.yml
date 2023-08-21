@@ -11,7 +11,17 @@ services:
       - DATABASE_URL=${DATABASE_DSN}
     depends_on:
       - db
-  
+
+  test:
+    build: 
+      dockerfile: Dockerfile-test
+    volumes:
+      - .:/code
+    stdin_open: true
+    depends_on:
+      - linkl
+      - db_test
+
   db:
     image: postgres:15-alpine
     volumes:
