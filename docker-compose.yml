@@ -6,7 +6,7 @@ services:
     volumes:
       - .:/code
     ports:
-      - 8009:8000
+      - "8009:8000"
     environment:
       - DATABASE_URL=${DATABASE_DSN}
     depends_on:
@@ -27,7 +27,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     expose:
-      - ${DB_PORT}
+      - "${DB_PORT}"
     environment:
       - LC_ALL=C.UTF-8
       - POSTGRES_DB=${DB_NAME}
@@ -41,7 +41,7 @@ services:
     volumes:
       - test_postgres_data:/var/lib/postgresql/data/
     expose:
-      - ${DB_TEST_PORT}
+      - "${DB_TEST_PORT}"
     environment:
       - LC_ALL=C.UTF-8
       - POSTGRES_DB=${DB_TEST_NAME}
